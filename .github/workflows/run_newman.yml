@@ -1,0 +1,32 @@
+name: newman_tests
+
+on:
+  push
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 6.0.x
+    - name: Setup Node
+      uses: actions/setup-node@v1
+      with:
+        node-version: 12.x
+    - name: Install Newman
+      run: npm install -g newman
+    - name: Restore dependencies
+      run: dotnet restore ./src/ServerNet6/ServerNet6.csproj
+    - name: Build
+      run: dotnet build ./src/ServerNet6/ServerNet6.csproj -c Release -o ./build
+    - name: RunServerAndTestScripts
+      run: |
+       dotnet ./build/ServerNet6.dll --urls=https://localhost:7228/ &
+       sleep 5
+       newman run ./postman_test_collection.json --insecure
+       kill -9 `lsof -i:7228 -t`
