@@ -44,6 +44,7 @@ namespace AasxServerBlazor
         {
             services.AddRazorPages();
             services.AddServerSideBlazor();
+            //REVIEW BR this is a singelton every scoped request relies on. this is a bottleneck
             services.AddSingleton<AASService>();
             services.AddCors();
 

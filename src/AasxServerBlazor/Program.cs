@@ -28,6 +28,11 @@ namespace AasxServerBlazor
 
             CreateHostBuilder(args).Build().RunAsync();
 
+            /*
+             * REVIEW BR    AasxServer is part of "standard bib"
+             *              "standard bib" is not used as a library, but as a program
+             */
+            
             AasxServer.Program.Main(args);
 
         }

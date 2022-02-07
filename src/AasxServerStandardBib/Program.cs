@@ -59,6 +59,11 @@ namespace AasxServer
 
     public static class Program
     {
+
+        //REVIEW BR the amount of static data is alarming
+        //          this is a complete in memory solution, it will quickly reach the limits
+        //          consequences: too much memory consumptions, out of memory errors
+
         public static int envimax = 100;
         public static AdminShellPackageEnv[] env = new AdminShellPackageEnv[100]
             {
@@ -179,6 +184,9 @@ namespace AasxServer
             // ReSharper enable UnusedAutoPropertyAccessor.Local
         }
 
+        /*
+         * Review BR    500 LoC for what? Startup, Configuration, Initialisation...
+         */
         private static int Run(CommandLineArguments a)
         {
             if (a.Connect != null)
@@ -260,6 +268,7 @@ namespace AasxServer
             Program.noSecurity = a.NoSecurity;
             Program.edit = a.Edit;
 
+            // REVIEW BR why is this debug specific code needed and why here?
             // Wait for Debugger
             if (a.DebugWait)
             {
@@ -319,6 +328,7 @@ namespace AasxServer
             };
 
             hostPort = a.Host + ":" + a.Port;
+            //REVIEW BR why does the standard bib need to know the blazor host,port? same string get reassigned?
             blazorHostPort = a.Host + ":" + blazorHostPort;
 
             if (a.ExternalRest != null)
@@ -349,6 +359,7 @@ namespace AasxServer
             }
             */
 
+            //REVIEW BR should be handled by ASP.NET Core
             // Read root cert from root subdirectory
             Console.WriteLine("Security 1 Startup - Server");
             Console.WriteLine("Security 1.1 Load X509 Root Certificates into X509 Store Root");
@@ -405,6 +416,9 @@ namespace AasxServer
 
             int envi = 0;
 
+            /*
+             * Review BR    Is this storage logic?
+             */
             string[] fileNames = null;
             if (Directory.Exists(AasxHttpContextHelper.DataPath))
             {
@@ -478,6 +492,13 @@ namespace AasxServer
 
                 Console.WriteLine("REST Server started.");
             }
+
+            /*
+             * REVIEW BR    i40language, timeseries, energymodel, mqtt, opc ua, httpclient
+             *              is this infrastructure code? why here and not encapsulated?
+             *              looks like there is no application lifecycle defined or available to attach to
+             */
+            
 
             i40LanguageRuntime.initialize();
 
@@ -1558,6 +1579,7 @@ namespace AasxServer
             }
         }
 
+        //REVIEW BR this triggers something? starts polling mechanism? why not use a event based architecture or dedicated service to registers for changes/updates? ...
         public static event EventHandler NewDataAvailable;
 
         public class NewDataAvailableArgs : EventArgs
@@ -1570,6 +1592,7 @@ namespace AasxServer
             }
         }
 
+        //REVIEW BR magic numbers. use enumerations.
         // 0 == same tree, only values changed
         // 1 == same tree, structure may change
         // 2 == build new tree, keep open nodes

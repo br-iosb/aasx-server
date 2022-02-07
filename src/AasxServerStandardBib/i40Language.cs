@@ -17,6 +17,15 @@ Copyright (c) 2018-2020 Festo SE & Co. KG <https://www.festo.com/net/de_de/Forms
 
 namespace AasxServer
 {
+
+    /* REVIEW BR
+     *              In general
+     *              too many switch cases
+     *              too much model traversal code
+     *              change polling via thread?
+     *              event mechanism needed?
+     *              the actual business logic of this code is not recognizable
+     */
     public class i40LanguageAutomaton
     {
         public AdminShell.SubmodelElementCollection automatonControl;
@@ -663,7 +672,7 @@ namespace AasxServer
                 int mode = 0;
                 if (treeChanged)
                     mode = 2;
-                Program.signalNewData(mode);
+                Program.signalNewData(mode);// REVIEW BR    is this how sending events is managed?
                 Thread.Sleep(1000);
             }
         }

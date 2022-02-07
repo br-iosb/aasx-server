@@ -69,6 +69,8 @@ namespace AasxTimeSeries
 
             for (int i = 0; i < aascount; i++)
             {
+                //REVIEW BR It seems like AasxServer.Program is a Singelton everyone depends on
+                //          use Singelton Pattern with Depenedcy Injection and dedicated Interfaces
                 var env = AasxServer.Program.env[i];
                 if (env != null)
                 {
@@ -129,6 +131,7 @@ namespace AasxTimeSeries
                                                 var idShort = sme2.idShort;
                                                 if (idShort.Contains("opcNode"))
                                                     idShort = "opcNode";
+                                                //REVIEW BR what has modbus to do with time series?
                                                 if (idShort.Contains("modbusNode"))
                                                     idShort = "modbusNode"; switch (idShort)
                                                 {
@@ -1000,6 +1003,7 @@ namespace AasxTimeSeries
         }
         public static void GetData(TimeSeriesBlock tsb)
         {
+            //REVIEW BR what does opc ua to do with time series?
             if (session != null)
             {
                 ReadRawModifiedDetails details = new ReadRawModifiedDetails();
